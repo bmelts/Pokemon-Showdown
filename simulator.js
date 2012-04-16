@@ -2268,9 +2268,9 @@ function Battle(roomid, format, rated)
 		if (typeof modifier === 'string')
 		{
 			trigger = selfB.runEvent(trigger+'Trigger', arg1, arg2, arg3, function(oldMod, newMod) {
-				if (!oldMod) oldMod = 4096;
-				if (!newMod) newMod = 4096;
-				return ((oldMod * newMod) + 2048) >> 12;
+				if (!oldMod) oldMod = 0x1000;
+				if (!newMod) newMod = 0x1000;
+				return ((oldMod * newMod) + 0x800) >> 12;
 			});
 		}
 		if (typeof modifier === 'number') return selfB.modify(value, trigger, 1, true);
@@ -2286,8 +2286,8 @@ function Battle(roomid, format, rated)
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		if (!isRawInteger) var modifier = Math.floor(numerator*4096/denominator);
-		return Math.round(value * modifier / 4096);
+		if (!isRawInteger) var modifier = Math.floor(numerator*0x1000/denominator);
+		return Math.round(value * modifier / 0x1000);
 	};
 	this.getDamage = function(pokemon, target, move, suppressMessages) {
 		if (typeof move === 'string') move = selfB.getMove(move);

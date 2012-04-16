@@ -2264,6 +2264,17 @@ function Battle(roomid, format, rated)
 		selfB.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
+	this.runTriggers = function(trigger, value, arg1, arg2, arg3) {
+		if (typeof modifier === 'string')
+		{
+			trigger = selfB.runEvent(trigger+'Trigger', arg1, arg2, arg3, function(oldMod, newMod) {
+				if (!oldMod) oldMod = 4096;
+				return ((oldMod * newMod) + 2048) >> 12;
+			});
+		}
+		if (typeof modifier === 'number') return selfB.modify(value, trigger, 1, true);
+		else return value;
+	};
 	this.modify = function(value, numerator, denominator, isRawInteger) {
 		// You can also use:
 		// modify(value, [numerator, denominator])

@@ -1453,12 +1453,17 @@ function Battle(roomid, format, rated)
 		if (!target) target = selfB;
 		var statuses = selfB.getRelevantEffects(target, 'on'+eventid, 'onSource'+eventid, source);
 		var hasRelayVar = true;
+		var lastReturnVal = 0;
 		effect = selfB.getEffect(effect);
 		var args = [target, source, effect];
 		//console.log('Event: '+eventid+' (depth '+selfB.eventDepth+') t:'+target.id+' s:'+(!source||source.id)+' e:'+effect.id);
 		if (typeof relayVar === 'undefined' || relayVar === null)
 		{
 			relayVar = true;
+			hasRelayVar = false;
+		}
+		else if (typeof relayVar === 'function')
+		{
 			hasRelayVar = false;
 		}
 		else
@@ -1540,14 +1545,22 @@ function Battle(roomid, format, rated)
 			}
 			if (typeof returnVal !== 'undefined')
 			{
-				relayVar = returnVal;
-				if (!relayVar) return relayVar;
-				if (hasRelayVar)
+				if (typeof relayVar === 'function')
 				{
-					args[0] = relayVar;
+					lastReturnVal = relayVar(lastReturnVal, returnVal);
+				}
+				else
+				{
+					relayVar = returnVal;
+					if (!relayVar) return relayVar;
+					if (hasRelayVar)
+					{
+						args[0] = relayVar;
+					}
 				}
 			}
 		}
+		if (lastReturnVal) relayVar = lastReturnVal;
 		return relayVar;
 	};
 	this.resolveLastPriority = function(statuses, callbackType) {

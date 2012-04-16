@@ -2346,12 +2346,11 @@ function Battle(roomid, format, rated)
 		var type = move.type;
 		// '???' is typeless damage: used for Struggle and Confusion etc
 		
-		var basePower = move.basePower;
 		if (move.basePowerCallback)
 		{
-			basePower = move.basePowerCallback.call(selfB, pokemon, target);
+			move.basePower = move.basePowerCallback.call(selfB, pokemon, target);
 		}
-		if (!basePower) return 0;
+		if (!move.basePower) return 0;
 		
 		move.critRatio = clampIntRange(move.critRatio, 0, 5);
 		var critMult = [0, 16, 8, 4, 3, 2];
@@ -2399,8 +2398,8 @@ function Battle(roomid, format, rated)
 
 		// base damage
 		var damage = floor(2 * level / 5) + 2;
-		basePower = selfB.runTriggers('BasePower', basePower, pokemon, target, move);
-		damage *= basePower;
+		move.basePower = selfB.runTriggers('BasePower', move.basePower, pokemon, target, move);
+		damage *= move.basePower;
 		damage *= attack;
 		damage = floor(damage / defense);
 		damage = floor(damage / 50) + 2;
@@ -2449,7 +2448,7 @@ function Battle(roomid, format, rated)
 
 		damage = Math.round(damage);
 		
-		if (basePower && !floor(damage))
+		if (move.basePower && !floor(damage))
 		{
 			damage = 1;
 		}

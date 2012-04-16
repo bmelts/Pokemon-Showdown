@@ -79,6 +79,7 @@ exports.BattleAbilities = {
 	"analytic": {
 		desc: "If the user moves last, the power of that move is increased by 30%.",
 		shortDesc: "Raises the power of all moves by 30% if the Pokemon moves last.",
+		onBasePowerTriggerOrder: 3,
 		id: "analytic",
 		name: "Analytic",
 		rating: 1,
@@ -422,10 +423,11 @@ exports.BattleAbilities = {
 				return null;
 			}
 		},
-		onFoeBasePower: function(basePower, attacker, defender, move) {
+		onFoeBasePowerTriggerOrder: 10,
+		onFoeBasePowerTrigger: function(attacker, defender, move) {
 			if (move.type === 'Fire')
 			{
-				return basePower * 5/4;
+				return 0x1400;
 			}
 		},
 		onWeather: function(target, source, effect) {
@@ -719,10 +721,11 @@ exports.BattleAbilities = {
 	},
 	"heatproof": {
 		desc: "This Pokemon receives half damage from both Fire-type attacks and residual burn damage.",
-		onSourceBasePower: function(basePower, attacker, defender, move) {
+		onSourceBasePowerTriggerOrder: 9,
+		onSourceBasePowerTrigger: function(attacker, defender, move) {
 			if (move.type === 'Fire')
 			{
-				return basePower / 2;
+				return 0x800;
 			}
 		},
 		onDamage: function(damage, attacker, defender, effect) {
@@ -949,11 +952,12 @@ exports.BattleAbilities = {
 	},
 	"ironfist": {
 		desc: "This Pokemon receives a 20% power boost for the following attacks: Bullet Punch, Comet Punch, Dizzy Punch, Drain Punch, Dynamicpunch, Fire Punch, Focus Punch, Hammer Arm, Ice Punch, Mach Punch, Mega Punch, Meteor Mash, Shadow Punch, Sky Uppercut, and Thunderpunch. Sucker Punch, which is known Ambush in Japan, is not boosted.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePowerTriggerOrder: 5,
+		onBasePower: function(attacker, defender, move) {
 			if (move.isPunchAttack)
 			{
 				this.debug('Iron Fist boost');
-				return basePower * 12/10;
+				return 0x1333;
 			}
 		},
 		id: "ironfist",
@@ -1541,11 +1545,12 @@ exports.BattleAbilities = {
 	},
 	"reckless": {
 		desc: "When this Pokemon uses an attack that causes recoil damage, or an attack that has a chance to cause recoil damage such as Jump Kick and Hi Jump Kick, the attacks's power receives a 20% boost.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePowerTriggerOrder: 4,
+		onBasePowerTrigger: function(attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil)
 			{
 				this.debug('Reckless boost');
-				return basePower * 12/10;
+				return 0x1333;
 			}
 		},
 		id: "reckless",
@@ -1565,18 +1570,19 @@ exports.BattleAbilities = {
 	},
 	"rivalry": {
 		desc: "Increases base power of Physical and Special attacks by 25% if the opponent is the same gender, but decreases base power by 25% if opponent is the opposite gender.",
-		onBasePower: function(basePower, attacker, defender, move) {
+		onBasePowerTriggerOrder: 7,
+		onBasePower: function(attacker, defender) {
 			if (attacker.gender && defender.gender)
 			{
 				if (attacker.gender === defender.gender)
 				{
 					this.debug('Rivalry boost');
-					return basePower * 5/4;
+					return 0x1400;
 				}
 				else
 				{
 					this.debug('Rivalry weaken');
-					return basePower * 3/4;
+					return 0xC00;
 				}
 			}
 		},
@@ -2099,12 +2105,12 @@ exports.BattleAbilities = {
 	},
 	"technician": {
 		desc: "When this Pokemon uses an attack that has 60 Base Power or less, the move's Base Power receives a 50% boost. For example, a move with 60 Base Power effectively becomes a move with 90 Base Power.",
-		onBasePowerPriority: 10,
-		onBasePower: function(basePower, attacker, defender, move) {
-			if (basePower <= 60)
+		onBasePowerTriggerOrder: 1,
+		onBasePowerTrigger: function(attacker, defender, move) {
+			if (move.basePower <= 60)
 			{
 				this.debug('Technician boost');
-				return basePower * 1.5;
+				return 0x1800;
 			}
 		},
 		id: "technician",
@@ -2186,10 +2192,11 @@ exports.BattleAbilities = {
 	},
 	"toxicboost": {
 		desc: "When the user is poisoned, its Attack stat is raised by 50%.",
-		onModifyStats: function(stats, pokemon) {
+		onBasePowerTriggerOrder: 6,
+		onBasePowerTrigger: function(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox')
 			{
-				stats.atk *= 1.5;
+				return 0x1800;
 			}
 		},
 		id: "toxicboost",

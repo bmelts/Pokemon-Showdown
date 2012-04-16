@@ -2264,7 +2264,7 @@ function Battle(roomid, format, rated)
 		selfB.runEvent('Heal', target, source, effect, damage);
 		return damage;
 	};
-	this.modify = function(value, numerator, denominator) {
+	this.modify = function(value, numerator, denominator, isRawInteger) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
 		// modify(value, fraction) - assuming you trust JavaScript's floating-point handler
@@ -2274,7 +2274,7 @@ function Battle(roomid, format, rated)
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		var modifier = Math.floor(numerator*4096/denominator);
+		if (!isRawInteger) var modifier = Math.floor(numerator*4096/denominator);
 		return Math.round(value * modifier / 4096);
 	};
 	this.getDamage = function(pokemon, target, move, suppressMessages) {

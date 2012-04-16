@@ -2368,18 +2368,6 @@ function Battle(roomid, format, rated)
 			move.crit = selfB.runEvent('CriticalHit', target, null, move);
 		}
 		
-		// happens after crit calculation
-		if (basePower)
-		{
-			basePower = selfB.runEvent('BasePower', pokemon, target, move, basePower);
-			
-			if (move.basePowerModifier)
-			{
-				basePower *= move.basePowerModifier;
-			}
-		}
-		if (!basePower) return 0;
-		
 		var attack = move.category==='Physical'?pokemon.stats.atk:pokemon.stats.spa;
 		var defense = move.defensiveCategory==='Physical'?target.stats.def:target.stats.spd;
 		var level = pokemon.level;
@@ -2407,26 +2395,31 @@ function Battle(roomid, format, rated)
 			selfB.debug('Negating (sp)def boost/penalty.');
 			defense = move.defensiveCategory==='Physical'?target.unboostedStats.def:target.unboostedStats.spd;
 		}
-		
-		//int(int(int(2*L/5+2)*A*P/D)/50);
-		var baseDamage = floor(floor(floor(2*level/5+2) * basePower * attack/defense)/50) + 2;
-		
-		// multi-target modifier (doubles only)
-		// weather modifier (TODO: relocate here)
-		// crit
+
+		// base damage
+		var damage = floor(2 * level / 5) + 2;
+		basePower = selfB.runTriggers('BasePower', basePower, move, pokemon, target);
+		damage *= basePower;
+		damage *= attack;
+		damage = floor(damage / defense);
+		damage = floor(damage / 50) + 2;
+
+		//if (selfB.targets.length > 1) damage = selfB.runTriggers(0xc00, damage); // multitarget modifier, in the future
+
+		if (!pokemon.ignore.WeatherTarget) damage = selfB.runTriggers('Weather', damage, move, pokemon, target);
 		if (move.crit)
 		{
 			if (!suppressMessages) selfB.add('-crit', target);
-			baseDamage = selfB.modify(baseDamage, move.critModifier || 2);
+			damage = selfB.modify(damage, move.critModifier || 2);
 		}
-		
+
 		// randomizer
 		// this is not a modifier
 		// gen 1-2
 		//var randFactor = floor(Math.random()*39)+217;
 		//baseDamage *= floor(randFactor * 100 / 255) / 100;
-		baseDamage *= Math.round((100 - floor(Math.random() * 16)) / 100);
-		
+		damage = floor(damage * (100 - floor(Math.random() * 16)) / 100);
+
 		// STAB
 		if (type !== '???' && pokemon.hasType(type))
 		{
@@ -2434,36 +2427,35 @@ function Battle(roomid, format, rated)
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
 			// (On second thought, it might be easier to get a Missingno.)
-			baseDamage = selfB.modify(baseDamage, move.stab || 1.5);
+			damage = selfB.modify(damage, move.stab || 1.5);
 		}
+
 		// types
 		var totalTypeMod = selfB.getEffectiveness(type, target);
 		if (totalTypeMod > 0)
 		{
 			if (!suppressMessages) selfB.add('-supereffective', target);
-			baseDamage *= 2;
-			if (totalTypeMod >= 2)
-			{
-				baseDamage *= 2;
-			}
+			damage <<= totalTypeMod;
 		}
 		if (totalTypeMod < 0)
 		{
 			if (!suppressMessages) selfB.add('-resisted', target);
-			baseDamage /= 2;
-			if (totalTypeMod <= -2)
-			{
-				baseDamage /= 2;
-			}
+			damage >>= -totalTypeMod;
 		}
-		baseDamage = Math.round(baseDamage);
+
+		// burn check
+		if (move.type === 'Physical' && pokemon.status === 'brn' && pokemon.ability !== 'guts') damage = floor(damage * 50 / 100);
+
+		damage = Math.round(damage);
 		
-		if (basePower && !floor(baseDamage))
+		if (basePower && !floor(damage))
 		{
-			return 1;
+			damage = 1;
 		}
+
+		damage = selfB.runTriggers('Final', damage, move, pokemon, target);
 		
-		return floor(baseDamage);
+		return floor(damage);
 	};
 	this.getTarget = function(decision)
 	{

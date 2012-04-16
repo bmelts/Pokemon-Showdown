@@ -2399,7 +2399,7 @@ function Battle(roomid, format, rated)
 
 		// base damage
 		var damage = floor(2 * level / 5) + 2;
-		basePower = selfB.runTriggers('BasePower', basePower, move, pokemon, target);
+		basePower = selfB.runTriggers('BasePower', basePower, pokemon, target, move);
 		damage *= basePower;
 		damage *= attack;
 		damage = floor(damage / defense);
@@ -2407,7 +2407,7 @@ function Battle(roomid, format, rated)
 
 		//if (selfB.targets.length > 1) damage = selfB.runTriggers(0xc00, damage); // multitarget modifier, in the future
 
-		if (!pokemon.ignore.WeatherTarget) damage = selfB.runTriggers('Weather', damage, move, pokemon, target);
+		if (!pokemon.ignore.WeatherTarget) damage = selfB.runTriggers('Weather', damage, pokemon, target, move);
 		if (move.crit)
 		{
 			if (!suppressMessages) selfB.add('-crit', target);
@@ -2454,7 +2454,7 @@ function Battle(roomid, format, rated)
 			damage = 1;
 		}
 
-		damage = selfB.runTriggers('Final', damage, move, pokemon, target);
+		damage = selfB.runTriggers('Final', damage, pokemon, target, move);
 		
 		return floor(damage);
 	};

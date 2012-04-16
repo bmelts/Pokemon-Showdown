@@ -2269,6 +2269,7 @@ function Battle(roomid, format, rated)
 		{
 			trigger = selfB.runEvent(trigger+'Trigger', arg1, arg2, arg3, function(oldMod, newMod) {
 				if (!oldMod) oldMod = 4096;
+				if (!newMod) newMod = 4096;
 				return ((oldMod * newMod) + 2048) >> 12;
 			});
 		}

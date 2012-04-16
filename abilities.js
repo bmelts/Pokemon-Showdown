@@ -481,11 +481,12 @@ exports.BattleAbilities = {
 	},
 	"filter": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
-		onFoeBasePower: function(basePower, attacker, defender, move) {
+		onFoeFinalTriggerOrder: 7,
+		onFoeFinalTrigger: function(attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0)
 			{
 				this.debug('Filter neutralize');
-				return basePower * 3/4;
+				return 0xC00;
 			}
 		},
 		id: "filter",
@@ -651,6 +652,7 @@ exports.BattleAbilities = {
 	},
 	"friendguard": {
 		desc: "Reduces the damage received from an ally in a double or triple battle.",
+		onAllyFinalTriggerOrder: 5,
 		id: "friendguard",
 		name: "Friend Guard",
 		rating: 0,
@@ -1250,11 +1252,12 @@ exports.BattleAbilities = {
 	},
 	"multiscale": {
 		desc: "Lowers damage taken by half when at maximum HP.",
-		onSourceBasePower: function(basePower, attacker, defender, move) {
+		onSourceFinalTriggerOrder: 3,
+		onSourceFinalTrigger: function(attacker, defender) {
 			if (defender.hp >= defender.maxhp)
 			{
 				this.debug('Multiscale weaken');
-				return basePower/2;
+				return 0x800;
 			}
 		},
 		id: "multiscale",
@@ -1899,11 +1902,12 @@ exports.BattleAbilities = {
 	},
 	"solidrock": {
 		desc: "This Pokemon receives one-fourth reduced damage from Super Effective attacks.",
-		onFoeBasePower: function(basePower, attacker, defender, move) {
+		onFoeFinalTriggerOrder: 7,
+		onFoeFinalTrigger: function(attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) > 0)
 			{
 				this.debug('Solid Rock neutralize');
-				return basePower * 3/4;
+				return 0xC00;
 			}
 		},
 		id: "solidrock",
@@ -2153,12 +2157,12 @@ exports.BattleAbilities = {
 	},
 	"tintedlens": {
 		desc: "Doubles the power of moves that are Not Very Effective against opponents.",
-		onBasePowerPriority: -100,
-		onBasePower: function(basePower, attacker, defender, move) {
+		onFinalTriggerOrder: 4,
+		onFinalTrigger: function(attacker, defender, move) {
 			if (this.getEffectiveness(move.type, defender) < 0)
 			{
 				this.debug('Tinted Lens boost');
-				return basePower * 2;
+				return 0x2000;
 			}
 		},
 		id: "tintedlens",

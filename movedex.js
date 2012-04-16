@@ -6213,13 +6213,14 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeBasePower: function(basePower, attacker, defender, move) {
+			onFoeFinalTriggerOrder: 2,
+			onFoeFinalTrigger: function(attacker, defender, move) {
 				if (move.category === 'Special' && defender.side === this.effectData.target)
 				{
 					if (!move.crit && attacker.ability !== 'infiltrator')
 					{
 						this.debug('Light Screen weaken');
-						return basePower/2;
+						return 0x800; // 0xA8F if it's a double/triple battle
 					}
 				}
 			},
@@ -8272,15 +8273,6 @@ exports.BattleMovedex = {
 		num: 228,
 		accuracy: 100,
 		basePower: 40,
-		basePowerCallback: function(pokemon, target) {
-			// you can't get here unless the pursuit succeeds
-			if (target.beingCalledBack)
-			{
-				this.debug('Pursuit damage boost');
-				return 80;
-			}
-			return 40;
-		},
 		category: "Physical",
 		desc: "If the target switches out on the current turn, this move strikes with doubled power before the switch. Baton Passers still escape safely. When a faster Pokemon uses Pursuit against a U-Turner, the U-Turner is hit for normal damage; when a slower Pokemon uses Pursuit against a U-Turner, the U-Turner makes its attack, then is hit by Pursuit for double power, and switches out.",
 		shortDesc: "Doubles power if foe is switching.",
@@ -8315,6 +8307,10 @@ exports.BattleMovedex = {
 					sources[i].deductPP('pursuit');
 				}
 			}
+		},
+		onFinalTriggerOrder: 14, // tentative
+		onFinalTrigger: function(user, target) {
+			if (target.beingCalledBack === true) return 0x2000;
 		},
 		secondary: false,
 		target: "normal",
@@ -8642,13 +8638,14 @@ exports.BattleMovedex = {
 				}
 				return 5;
 			},
-			onFoeBasePower: function(basePower, attacker, defender, move) {
+			onFoeFinalTriggerOrder: 1,
+			onFoeFinalTrigger: function(attacker, defender, move) {
 				if (move.category === 'Physical' && defender.side === this.effectData.target)
 				{
 					if (!move.crit && attacker.ability !== 'infiltrator')
 					{
 						this.debug('Reflect weaken');
-						return basePower/2;
+						return 0x800; // 0xA8F if it's a double/triple battle
 					}
 				}
 			},

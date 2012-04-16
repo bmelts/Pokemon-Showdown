@@ -142,11 +142,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Steel"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Steel' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -341,11 +342,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Rock"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Rock' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -407,11 +409,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Normal"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Normal') {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -506,11 +509,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Fighting"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Fighting' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -535,11 +539,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Flying"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Flying' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -555,11 +560,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Dark"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Dark' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -931,10 +937,11 @@ exports.BattleItems = {
 		fling: {
 			basePower: 10
 		},
-		onBasePower: function(basePower, user, target, move) {
+		onFinalTriggerOrder: 10,
+		onFinalTrigger: function(user, target, move) {
 			if (move && this.getEffectiveness(move.type, target) > 0)
 			{
-				return basePower * 1.2;
+				return 0x1333;
 			}
 		},
 		desc: "Super effective attacks are 20% stronger."
@@ -1238,11 +1245,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Dragon"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Dragon' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -1435,11 +1443,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Ghost"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Ghost' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -1455,11 +1464,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Poison"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Poison' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -1614,10 +1624,11 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
-		onBasePower: function(basePower, user) {
+		onFinalTriggerOrder: 11,
+		onFinalTrigger: function(user) {
 			this.debug('LO boost');
 			user.addVolatile('lifeorb');
-			return basePower * 1.3;
+			return 0x14CC;
 		},
 		effect: {
 			duration: 1,
@@ -1859,6 +1870,7 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30
 		},
+		onFinalTriggerOrder: 9,
 		desc: "Boost the power of attacks used consecutively."
 	},
 	"micleberry": {
@@ -2015,11 +2027,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Fire"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Fire' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -2089,11 +2102,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Water"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Water' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -2109,11 +2123,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Psychic"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Psychic' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -2425,11 +2440,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Grass"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Grass' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -2634,11 +2650,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Ground"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Ground' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -2940,11 +2957,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Bug"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Bug' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -3025,11 +3043,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Electric"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Electric' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
@@ -3194,11 +3213,12 @@ exports.BattleItems = {
 			basePower: 60,
 			type: "Ice"
 		},
-		onSourceBasePower: function(basePower, user, target, move) {
+		onSourceFinalTriggerOrder: 12,
+		onSourceFinalTrigger: function(user, target, move) {
 			if (move.type === 'Ice' && this.getEffectiveness(move.type, target) > 0) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					return basePower * 0.5;
+					return 0x800;
 				}
 			}
 		},
